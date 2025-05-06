@@ -1,0 +1,174 @@
+<div class="header pb-8 pt-5 pt-lg-8 d-flex justify-content-center align-items-center"
+style="background-color: #1c2b4f;">
+<div *ngIf="role=='Magasinage'">
+<h1 class="text-white text-center display-4 m-0">Service Magasinage</h1>
+</div>
+<div *ngIf="role=='Commercial'">
+  <h1 class="text-white text-center display-4 m-0">Service Commercial</h1>
+  </div>
+</div>
+
+<!-- Page content -->
+<div class="container-fluid mt--7">
+  <div class="container mt-4">
+    <h3 class="mb-3">Liste des Expéditions</h3>
+  
+    <!-- Search & Pagination Controls -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" class="form-control" placeholder="Rechercher par client...">
+      </div>
+      <div class="col-md-6 text-end">
+        <label class="text-primary">Items par page:
+          <select [(ngModel)]="itemsPerPage" (change)="applyFilters()" class="form-select w-auto d-inline-block">
+            <option [value]="5">5</option>
+            <option [value]="10">10</option>
+            <option [value]="20">20</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th (click)="sortData('client')">Client</th>
+            <th (click)="sortData('poids')">Poids (kg)</th>
+            <th (click)="sortData('volume')">Volume (m³)</th>
+            <th (click)="sortData('provenance')">Provenance</th>
+            <th (click)="sortData('incoterm')">Incoterm</th>
+            <th (click)="sortData('magasinCale')">Magasin Cale</th>
+            
+            <th>BL</th> <!-- blFileUrl -->
+            <th>Statut</th>
+            <th>Motif Modification</th>
+            <th>BL Final</th> <!-- blFinalPath -->
+          
+            <th>Collisage</th> <!-- listeCollisagePath -->
+            <th>Facture</th> <!-- facturePath -->
+          
+            <th (click)="sortData('estimatedDeparture')">Départ</th>
+            <th (click)="sortData('estimatedArrival')">Arrivée</th>
+            <div *ngIf="role=='Commercial'">
+            <th>Actions</th>
+            </div>
+          </tr>
+          
+        </thead>
+        <tbody>
+          <tr *ngFor="let shipment of paginatedShipments">
+            <td>{{ shipment.client }}</td>
+            <td>{{ shipment.poids }}</td>
+            <td>{{ shipment.volume }}</td>
+            <td>{{ shipment.provenance }}</td>
+            <td>{{ shipment.incoterm }}</td>
+            <td>{{ shipment.magasinCale }}</td>
+          
+            <td class="text-center">
+              <a *ngIf="shipment.insertionBlPath" (click)="downloadFile(shipment.idShipment, 'Bl')" ngbTooltip="Télécharger le fichier BL">
+                <i class="fas fa-solid fa-file-pdf fa-2x text-primary" style="cursor: pointer;" style="cursor: pointer;"></i>
+              </a>
+              <i *ngIf="!shipment.insertionBlPath" class="fas fa-solid fa-file-excel fa-2x text-muted" placement="top" ngbTooltip="Fichier BL manquant"></i>
+            </td>
+          
+            <td>
+              <span class="badge d-flex justify-content-center align-items-center" [ngClass]="shipment.confirme ? 'bg-success' : 'bg-secondary'">
+                <i class="fa" [ngClass]="shipment.confirme ? 'fa-check fa-lg' : 'fa-times fa-lg'"></i>
+              </span>
+            </td>
+            <td>{{ shipment.motifModification }}</td>
+            <td class="text-center">
+              <a *ngIf="shipment.blFinalPath" (click)="downloadFile(shipment.idShipment, 'BlFinal')" ngbTooltip="Télécharger le fichier BL Final">
+                <i class="fas fa-file-pdf fa-2x text-primary" style="cursor: pointer;"></i>
+              </a>
+              <i *ngIf="!shipment.blFinalPath" class="fas fa-solid fa-file-excel fa-2x text-muted" placement="top" ngbTooltip="Fichier BL Final manquant"></i>
+            </td>
+          
+            <td class="text-center">
+              <a *ngIf="shipment.listeCollisagePath" (click)="downloadFile(shipment.idShipment, 'Collisage')" ngbTooltip="Télécharger le fichier de collisage">
+                <i class="fas fa-file-pdf fa-2x text-primary" style="cursor: pointer;"></i>
+              </a>
+              <i *ngIf="!shipment.listeCollisagePath" class="fas fa-solid fa-file-excel fa-2x text-muted" placement="top" ngbTooltip="Fichier de collisage manquant"></i>
+            </td>
+            
+            <td class="text-center">
+              <a *ngIf="shipment.facturePath" (click)="downloadFile(shipment.idShipment, 'Facture')" ngbTooltip="Télécharger la facture">
+                <i class="fas fa-file-pdf fa-2x text-primary" style="cursor: pointer;"></i>
+              </a>
+              <i *ngIf="!shipment.facturePath" class="fas fa-solid fa-file-excel fa-2x text-muted" placement="top" ngbTooltip="Facture manquante"></i>
+            </td>            
+          
+            <td>{{ shipment.estimatedDeparture | date: 'd MMMM yyyy' }}</td>
+            <td>{{ shipment.estimatedArrival | date: 'd MMMM yyyy' }}</td>
+            <div *ngIf="role=='Commercial'">
+            <td>
+              <a class="btn btn-sm btn-primary me-1" [routerLink]="['../update-shipment', shipment.idShipment]" title="modifier">
+                <i class="fas fa-solid fa-pencil-alt"></i>
+              </a>
+              <button class="btn btn-danger btn-sm" (click)="openModal(shipment.idShipment)" title="supprimer">
+                <i class="fas fa-solid fa-trash-alt"></i>
+              </button>
+            </td>
+            </div>
+            <td>
+              <div *ngIf="getArrivalAlert(shipment.estimatedArrival)" class="d-flex align-items-center text-warning">
+                <i class="fas fa-solid fa-bell me-2 blinking-icon"></i>&nbsp;
+                <span>{{ getArrivalAlert(shipment.estimatedArrival) }}</span>
+              </div>
+            </td>
+          </tr>
+          
+          <tr *ngIf="paginatedShipments.length === 0">
+            <td colspan="11" class="text-center">Aucune expédition trouvée.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Pagination -->
+    <nav *ngIf="totalPages > 1">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="previousPage()"><i class="fas fa-angle-left"></i></a>
+        </li>
+        <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" [class.active]="i + 1 === currentPage">
+          <a class="page-link" (click)="goToPage(i + 1)">{{ i + 1 }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="nextPage()"><i class="fas fa-angle-right"></i></a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="d-flex justify-content-center">
+  <div class="col-8">
+    <app-comment></app-comment>
+  </div>
+  </div>
+  <!-- Delete Confirmation Modal -->
+<div
+class="modal fade show d-block"
+tabindex="-1"
+*ngIf="showCustomModal"
+style="background-color: rgba(0,0,0,0.5); z-index: 1050;"
+>
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Confirmation de suppression</h5>
+      <button type="button" class="btn-close" (click)="closeModal()"></button>
+    </div>
+    <div class="modal-body">
+      Êtes-vous sûr de vouloir supprimer cet envoi ?
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
+      <button type="button" class="btn btn-danger" (click)="confirmDelete()">Supprimer</button>
+    </div>
+  </div>
+</div>
+</div>
+
+
+</div>

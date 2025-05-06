@@ -1,0 +1,149 @@
+<div class="header pb-8 pt-5 pt-lg-8 d-flex justify-content-center align-items-center"
+style="background-color: #1c2b4f;">
+<h1 class="text-white text-center display-4 m-0">Service Commercial</h1>
+</div>
+<div class="container-fluid mt--7">
+  <div class="row">
+    <div class="col-xl-12 order-xl-1">
+      <div class="card bg-secondary shadow">
+        <div class="card-header bg-white border-0">
+          <div class="row align-items-center">
+            <div class="col-8">
+              <h3 class="mb-0">Création d'une Expédition</h3>
+            </div>
+            <div class="col-4 text-right">
+              <a [routerLink]="['../tables']" class="btn btn-sm btn-primary">Annuler</a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="shipmentForm" (ngSubmit)="onSubmit()">
+            <h6 class="heading-small text-muted mb-4">Détails de l'Expédition</h6>
+            <div class="pl-lg-4">
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-username">Client</label>
+                    <input type="text" id="input-client" class="form-control form-control-alternative"
+                      formControlName="client" placeholder="Client">
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-email">Poids </label>
+                    <input type="number" id="input-poids" class="form-control form-control-alternative"
+                      formControlName="poids" placeholder="Poids (kg)">
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-first-name">Volume</label>
+                    <input type="number" id="input-volume" class="form-control form-control-alternative"
+                      formControlName="volume" type="number" placeholder="Volume (m³)">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-last-name">Provenance</label>
+                    <input type="text" id="input-provenance" class="form-control form-control-alternative"
+                      formControlName="provenance" placeholder="Provenance">
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-incoterm">Incoterm</label>
+                    <select id="input-incoterm"
+                            class="form-control form-control-alternative"
+                            formControlName="incoterm">
+                      <option *ngFor="let incoterm of incotermList" [value]="incoterm">{{ incoterm }}</option>
+                    </select>
+                  </div>
+                </div>                
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-city">Magasin Cale</label>
+                    <input type="text" id="input-magasin" class="form-control form-control-alternative"
+                      formControlName="magasinCale" placeholder="Magasin Cale">
+                  </div>
+                </div>
+              </div>
+            </div>
+              <hr class="my-4" />
+              <!-- Address -->
+              <div class="pl-lg-4">
+                <div class="row">
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-first-name">Insertion BL</label>
+                      <input id="input-bl" class="form-control form-control-alternative" type="file"
+                        (change)="onFileChange($event, 'blFile')">
+                    </div>
+                  </div>
+                  <div class="col-lg-1">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-country">Statut</label>
+                      <input id="input-status" class="form-control form-control-alternative" formControlName="confirme"
+                        type="checkbox">
+                    </div>
+                  </div>
+                  <div class="col-lg-7">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-country">Motif de Modification</label>
+                      <input type="text" id="input-modification" class="form-control form-control-alternative"
+                        formControlName="motifModification" placeholder="Motif de modification">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-last-name">BL Final</label>
+                      <input id="input-final" class="form-control form-control-alternative" type="file"
+                        (change)="onFileChange($event, 'blFinalFile')">
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-username">ETD</label>
+                      <input type="date" id="input-depart" class="form-control form-control-alternative"
+                        formControlName="estimatedDeparture" placeholder="Départ prévu">
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-email">ETA</label>
+                      <input type="date" id="input-arrivee" class="form-control form-control-alternative"
+                        formControlName="estimatedArrival" placeholder="Arrivée prévue">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr class="my-4" />
+              <h6 class="heading-small text-muted mb-4">Pièces Jointes de l'Expédition</h6>
+              <div class="pl-lg-4">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-first-name">Liste Collisage</label>
+                      <input id="input-collisage" class="form-control form-control-alternative" type="file"
+                        (change)="onFileChange($event, 'collisageFile')">
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-last-name">Facture</label>
+                      <input id="input-facture" class="form-control form-control-alternative" type="file"
+                        (change)="onFileChange($event, 'factureFile')">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary my-4">Envoyer</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

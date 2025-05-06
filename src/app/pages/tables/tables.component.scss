@@ -1,0 +1,19 @@
+.modal-backdrop.show {
+    z-index: 1040;
+  }
+  
+  .modal-content {
+    z-index: 1050;
+  }
+  
+  .blinking-icon {
+    animation: blinker 1s linear infinite;
+    color: #ff0707; /* warning yellow */
+    font-size: 1.2rem;
+  }
+  
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }

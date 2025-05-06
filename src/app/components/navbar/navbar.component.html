@@ -1,0 +1,25 @@
+<nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
+  <div class="container-fluid">
+
+    <!-- User -->
+    <ul class="navbar-nav align-items-center d-none d-md-flex">
+      <li class="nav-item" ngbDropdown placement="bottom-right">
+        <a class="nav-link pr-0" role="button" >
+          <div class="media align-items-center">
+            <div class="media-body ml-2 d-none d-lg-block">
+              <span class="mb-0 text-sm  font-weight-bold"></span>
+            </div>
+          </div>
+        </a>
+      </li>
+    </ul>
+    <div  placement="bottom-right">
+      <a href="#!" (click)="logout()">
+        <div  style="color: white;">
+        <i class="ni ni-user-run"></i>
+        <span class="mb-0 text-sm  font-weight-bold"> Logout</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</nav>
