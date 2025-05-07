@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: false,
+  apiBaseUrl: "https://back-logistics.onrender.com/app"
 };

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: "http://localhost:8082/app"
+  apiBaseUrl: "https://back-logistics.onrender.com/app"
 };
 
 /*
